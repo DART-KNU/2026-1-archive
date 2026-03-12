@@ -36,8 +36,6 @@ MOCK_MODE=true              # true=모의투자, false=실전투자
 
 > `.env` 파일은 절대 Git에 올리지 마세요. (`.gitignore`에 포함되어 있습니다)
 
----
-
 ## 실행 방법
 
 ```bash
@@ -50,8 +48,6 @@ python examples/05_cancel_order.py   # 주문 취소
 
 > 매수/매도/취소 주문은 장 운영 시간(09:00~15:30)에만 가능합니다.
 > 취소 시 `05_cancel_order.py`에 `02_buy_order.py` 실행 시 출력된 주문번호를 입력하세요.
-
----
 
 ## 프로젝트 구조
 
@@ -75,8 +71,6 @@ kis_mock_trading/
     └── 05_cancel_order.py
 ```
 
----
-
 ## KIS API 지원 기능
 
 | 기능 | 함수 | TR-ID |
@@ -92,8 +86,6 @@ kis_mock_trading/
 |------|------|
 | `"00"` | 지정가 (기본값, price에 원하는 단가 입력) |
 | `"01"` | 시장가 (price=0으로 입력) |
-
----
 
 ## 참고
 - [KIS Developers 공식 문서](https://apiportal.koreainvestment.com/)
