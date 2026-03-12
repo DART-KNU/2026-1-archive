@@ -1,0 +1,15 @@
+# KIS API
+requests>=2.31.0
+python-dotenv>=1.0.1
+
+# 데이터 수집 및 처리
+pykrx>=1.0.35
+yfinance>=0.2.0
+pandas>=2.0.0
+numpy>=1.24.0
+
+# GARCH 변동성 모델
+arch>=6.0.0
+
+# 시각화
+matplotlib>=3.7.0

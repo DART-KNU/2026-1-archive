@@ -1,0 +1,12 @@
+# 개인 API 키 - 절대 Git에 올리지 마세요
+.env
+
+# 토큰 캐시 파일 (자동 생성됨)
+.token_cache
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
