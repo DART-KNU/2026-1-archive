@@ -67,12 +67,6 @@ kis_mock_trading/
 │   ├── kr_order.py         # place_buy_order(), place_sell_order(), cancel_order()
 │   └── kr_account.py       # get_balance()
 │
-├── data/
-│   └── collector.py        # pykrx 역사 데이터 수집 (파이프라인용)
-│
-├── risk/
-│   └── garch.py            # GARCH 변동성 신호 생성 (파이프라인용)
-│
 └── examples/               # 실행 예제 스크립트
     ├── 01_get_price.py
     ├── 02_buy_order.py
