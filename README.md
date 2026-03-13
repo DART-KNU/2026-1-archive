@@ -8,7 +8,7 @@
 ### 1. KIS 모의투자 API 신청
 1. [KIS Developers](https://apiportal.koreainvestment.com/) 회원가입
 2. **모의투자** APP 신청 → 앱키(AppKey)와 앱시크릿(AppSecret) 발급
-3. HTS/MTS에서 모의투자 계좌 개설 → 계좌번호 10자리 확인
+3. HTS/MTS에서 모의투자 계좌 개설 → 계좌번호 8자리 확인
 
 ### 2. 가상환경 생성 및 패키지 설치
 
