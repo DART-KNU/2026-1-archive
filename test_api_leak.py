@@ -1,2 +1,3 @@
-api_key = "AKIAIOSFODNN7EXAMPLE"
-secret = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+api_key = "AKIA4HPFAKE123REALKEY"
+secret = "abc123secretpassword!@#"
+github_token = "ghp_aBcDeFgHiJkLmNoPqRsTuVwXyZ123456"
