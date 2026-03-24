@@ -16,20 +16,22 @@ jobs:
             -not -path './.git/*' \
             \( -iname "*.csv" -o -iname "*.xlsx" -o -name ".env" \
                -o -name ".DS_Store" -o -name "__pycache__" -o -name ".venv" \) )
+
           if [ -n "$FORBIDDEN" ]; then
-            echo "🚨 금지된 파일이 감지되었습니다:"
+            echo "🚨 [보안 위반] 금지된 파일이 감지되었습니다:"
             echo "$FORBIDDEN"
+            echo "가이드를 확인하여 해당 파일을 삭제 후 다시 업로드하세요."
             exit 1
           fi
 
           LARGE=$(find . -not -path './.git/*' -type f -size +50M)
           if [ -n "$LARGE" ]; then
-            echo "🚨 50MB 초과 파일이 감지되었습니다:"
+            echo "🚨 [용량 초과] 50MB 이상의 파일은 업로드할 수 없습니다:"
             echo "$LARGE"
             exit 1
           fi
 
       - name: Gitleaks - API key scan
-        uses: gitleaks/gitleaks-action@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          docker run -v ${{ github.workspace }}:/path zricethezav/gitleaks:latest \
+            detect --source="/path" --verbose --redact
