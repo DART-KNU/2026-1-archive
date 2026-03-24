@@ -5,11 +5,11 @@
 ## 📁 폴더 구조
 각 활동 폴더 안에 **주제별(또는 개인별) 하위 폴더**가 미리 만들어져 있습니다. 본인의 폴더를 찾아 들어간 후 파일을 올려주세요.
 
-* 📂 **`2026-1-project`** : 프로젝트 활동 관련 코드 — 주제별 폴더
-* 📂 **`2026-1-quant-strategy`** : 퀀트 및 알고리즘 트레이딩 관련 코드 — 주제별 폴더
-* 📂 **`2026-1-report`** : 레포트 활동 관련 코드 — 주제별 폴더
-* 📂 **`2026-1-seminar`** : 세미나 활동 관련 코드 — 주제별 폴더
-* 📂 **`2026-1-mock-trading`** : 모의투자 포트폴리오 코드 — 개인별 폴더
+* 📂 **`project`** : 프로젝트 활동 관련 코드 — 주제별 폴더
+* 📂 **`quant-strategy`** : 퀀트 및 알고리즘 트레이딩 관련 코드 — 주제별 폴더
+* 📂 **`report`** : 레포트 활동 관련 코드 — 주제별 폴더
+* 📂 **`seminar`** : 세미나 활동 관련 코드 — 주제별 폴더
+* 📂 **`mock-trading`** : 모의투자 포트폴리오 코드 — 개인별 폴더
 
 ## 📝 파일명 규칙
 모든 파일/폴더명은 한글을 절대 사용하지 않고 **영어 소문자**로 작성하며, 단어 사이는 언더바(`_`)로 연결하는 스네이크 케이스(snake_case)를 사용합니다.
@@ -21,16 +21,16 @@
   * 폴더가 주제/개인을 이미 구분하므로, 파일명에는 내용만 간략히 적으면 됩니다.
 
 * **폴더 및 상황별 예시:**
-  * **seminar:** `2026-1-seminar/[subject]/[filename].ipynb`
-  * **project:** `2026-1-project/[subject]/[filename].ipynb`
-  * **report:** `2026-1-report/[subject]/[filename].ipynb`
-  * **quant-strategy:** `2026-1-quant-strategy/[subject]/[filename].ipynb`
-  * **mock-trading:** `2026-1-mock-trading/[10th_name]/[filename].ipynb`
+  * **seminar:** `seminar/[subject]/[filename].ipynb`
+  * **project:** `project/[subject]/[filename].ipynb`
+  * **report:** `report/[subject]/[filename].ipynb`
+  * **quant-strategy:** `quant-strategy/[subject]/[filename].ipynb`
+  * **mock-trading:** `mock-trading/[10th_name]/[filename].ipynb`
 
 ## 🚀 파일 업로드 방법
 깃(Git) 설치나 복잡한 명령어 없이 웹에서 바로 올릴 수 있습니다. **단, 커밋 메시지는 반드시 영어로 작성해야 합니다.**
 
-1. 이 저장소에서 본인이 업로드할 활동 폴더(예: `2026-1-seminar`)를 클릭해서 들어갑니다.
+1. 이 저장소에서 본인이 업로드할 활동 폴더(예: `seminar`)를 클릭해서 들어갑니다.
 2. **본인의 주제(또는 이름) 폴더**를 클릭해서 한 번 더 들어갑니다.
 3. 우측 상단의 **[Add file]** 버튼을 누르고 **[Upload files]** 를 선택합니다.
 4. 작성한 파일(`.ipynb`, `.py` 등)을 화면에 드래그 앤 드롭합니다.
