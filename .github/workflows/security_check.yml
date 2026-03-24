@@ -1,0 +1,35 @@
+name: DART Security Gate
+
+on: [push]
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check forbidden files and size
+        run: |
+          FORBIDDEN=$(find . \
+            -not -path './.git/*' \
+            \( -iname "*.csv" -o -iname "*.xlsx" -o -name ".env" \
+               -o -name ".DS_Store" -o -name "__pycache__" -o -name ".venv" \) )
+          if [ -n "$FORBIDDEN" ]; then
+            echo "🚨 금지된 파일이 감지되었습니다:"
+            echo "$FORBIDDEN"
+            exit 1
+          fi
+
+          LARGE=$(find . -not -path './.git/*' -type f -size +50M)
+          if [ -n "$LARGE" ]; then
+            echo "🚨 50MB 초과 파일이 감지되었습니다:"
+            echo "$LARGE"
+            exit 1
+          fi
+
+      - name: Gitleaks - API key scan
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
