@@ -5,5 +5,5 @@
 * **카페 링크:** [[18기 전략보고서] 코스닥 3,000 시대의 정책적 모멘텀 다이나믹 피라미딩 전략]((https://naver.me/FXn518Sf))
 
 ## 파일 설명
-* `17th_son_duil_portfolio_screening.ipynb` : 초기 포트폴리오 종목 스크리닝 코드
+* `17th_son_duil-portfolio_screening.ipynb` : 초기 포트폴리오 종목 스크리닝 코드
 #벡테스트 진행 불가
