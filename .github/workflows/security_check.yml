@@ -2,6 +2,9 @@ name: DART Security Gate
 
 on: [push]
 
+permissions:
+  issues: write
+
 jobs:
   scan:
     runs-on: ubuntu-latest
