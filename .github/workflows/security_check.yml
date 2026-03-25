@@ -33,20 +33,24 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
+            const now = new Date().toLocaleString('ko-KR', {timeZone: 'Asia/Seoul'});
             github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: 1,
-              body: `@imjyong 🚨 **[금지된 파일]** 업로드 금지 파일이 감지되었습니다.\n\n로그: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`
+              body: `@imjyong 🚨 **[금지된 파일]** 업로드 금지 파일이 감지되었습니다.\n\n발생 시각: ${now}\n로그: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`
             })
 
       - name: Check file size
         id: filesize
         run: |
-          LARGE=$(find . -not -path './.git/*' -type f -size +50M)
+          LARGE=$(find . -not -path './.git/*' -type f -size +30M)
           if [ -n "$LARGE" ]; then
-            echo "🚨 [용량 초과] 50MB 이상의 파일은 업로드할 수 없습니다:"
-            echo "$LARGE"
+            echo "🚨 [용량 초과] 30MB 이상의 파일이 감지되었습니다:"
+            while IFS= read -r file; do
+              size=$(du -sh "$file" | cut -f1)
+              echo "  $file ($size)"
+            done <<< "$LARGE"
             exit 1
           fi
 
@@ -55,11 +59,12 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
+            const now = new Date().toLocaleString('ko-KR', {timeZone: 'Asia/Seoul'});
             github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: 1,
-              body: `@imjyong 🚨 **[용량 초과]** 50MB 이상의 파일이 감지되었습니다.\n\n로그: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`
+              body: `@imjyong 🚨 **[용량 초과]** 30MB 이상의 파일이 감지되었습니다.\n\n발생 시각: ${now}\n로그: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`
             })
 
       - name: Gitleaks - API key scan
@@ -73,9 +78,10 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
+            const now = new Date().toLocaleString('ko-KR', {timeZone: 'Asia/Seoul'});
             github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: 1,
-              body: `@imjyong 🚨 **[API 키 유출]** 코드에서 API 키로 의심되는 내용이 감지되었습니다.\n\n로그: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`
+              body: `@imjyong 🚨 **[API 키 유출]** 코드에서 API 키로 의심되는 내용이 감지되었습니다.\n\n발생 시각: ${now}\n로그: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`
             })
