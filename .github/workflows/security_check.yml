@@ -24,7 +24,6 @@ jobs:
           if [ -n "$FORBIDDEN" ]; then
             echo "🚨 [보안 위반] 금지된 파일이 감지되었습니다:"
             echo "$FORBIDDEN"
-            echo "가이드를 확인하여 해당 파일을 삭제 후 다시 업로드하세요."
             exit 1
           fi
 
