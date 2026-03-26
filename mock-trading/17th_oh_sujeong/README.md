@@ -6,4 +6,3 @@
 
 ## 파일 설명
 * `portfolio_screening.ipynb` : 초기 포트폴리오 종목 스크리닝 코드
-* `backtest_result.py` : 전략 성과 분석 및 시각화 코드
