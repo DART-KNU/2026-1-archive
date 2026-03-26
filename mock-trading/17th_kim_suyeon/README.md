@@ -1,9 +1,9 @@
 # [2026-1] 모의투자 포트폴리오 - 17기_김수연
 
-## 전략 (예시 — 실제 내용으로 수정해 주세요)
-* **핵심 로직:** 저PBR 가치주 스크리닝 및 20일 이동평균선 돌파 매매
-* **카페 링크:** [DART 네이버 카페 게시글 제목](여기에_카페_게시글_주소를_넣으세요)
+## 전략 
+* **핵심 로직:** 가격 모멘텀과 실적 모멘텀을 랭크 합하여 상위종목 선정
+* **카페 링크:** [랭크 기반 듀얼 모멘텀 전략]((https://cafe.naver.com/f-e/cafes/29307656/articles/1072?boardtype=L&menuid=55&referrerAllArticles=false))
 
 ## 파일 설명 (예시 — 파일명·설명 자유)
-* `portfolio_screening.ipynb` : 초기 포트폴리오 종목 스크리닝 코드
-* `backtest_result.py` : 전략 성과 분석 및 시각화 코드
+* `portfolio_screening.ipynb` : 최근 날짜 포트폴리오 종목 스크리닝 코드
+* `backtest_result.py` : 백테스트 결과 및 시각화 코드
