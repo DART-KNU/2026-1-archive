@@ -2,7 +2,7 @@
 
 ## 전략
 * **핵심 로직:** VKOSPI로 주식 비중을 조절해가는 전략
-* **카페 링크:** [VKOKSPI와 20일 이동평균선을 활용한 전략](https://cafe.naver.com/knudart/1067)
+* **카페 링크:** [[18기 전략보고서] VKOKSPI와 20일 이동평균선을 활용한 전략](https://cafe.naver.com/knudart/1067)
 
 ## 파일 설명
 * `backtest.py` : 백테스트 코드
