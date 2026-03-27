@@ -1,0 +1,27 @@
+{
+  "metadata": {
+    "total_factors": 1,
+    "last_updated": "2026-03-25T10:41:19.915803+00:00"
+  },
+  "factors": {
+    "vol_price_divergence": {
+      "factor_name": "vol_price_divergence",
+      "factor_expression": "RANK(-TS_CORR($return,LOG($volume+1),5))",
+      "factor_description": "Volume-price correlation (low=reversal)",
+      "hypothesis": "Volume-price divergence (high volume with flat price) predicts KOSPI reversals at the 5-day horizon.",
+      "quality": "medium",
+      "backtest_metrics": {
+        "factor_name": "vol_price_divergence",
+        "expression": "RANK(-TS_CORR($return,LOG($volume+1),5))",
+        "IC": 0.025302,
+        "ICIR": 0.062187,
+        "Rank IC": 0.033259,
+        "Rank ICIR": 0.081423,
+        "coverage": 0.967,
+        "quality": "medium"
+      },
+      "round": 2,
+      "promoted_at": "2026-03-25T10:41:19.915627+00:00"
+    }
+  }
+}
