@@ -71,6 +71,7 @@ export ANTHROPIC_API_KEY="sk-ant-..."   # 선택
 ```bash
 pip install openai yfinance pandas numpy scipy requests fredapi qlib
 ```
+더 있을수도 있으니 알아서 깔기 python venv
 
 > **Python 3.9 이상** 권장. Qlib은 별도 의존성이 있으므로 공식 문서를 참고하세요: https://qlib.readthedocs.io
 
