@@ -5,5 +5,5 @@
 * **카페 링크:** [[18기 전략보고서]주도 섹터 저변동성 모멘텀 전략](https://cafe.naver.com/knudart/1061)
 
 ## 백테스트 
-* `portfolio_screening.ipynb` : 초기 포트폴리오 종목 스크리닝 코드
-* `backtest_result.py` : 전략 성과 분석 및 시각화 코드
+* 
+* `sqm_strategy.py` : 전략 성과 분석 및 시각화 코드
