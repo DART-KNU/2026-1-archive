@@ -1,0 +1,64 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+def simulate_arma(n=500, alpha=None, beta=None, seed=42, burnin=300):
+    if alpha is None:
+        alpha = [0.9, -0.2]
+    if beta is None:
+        beta = [-0.7, 0.1]
+
+    np.random.seed(seed)
+
+    p = len(alpha)
+    q = len(beta)
+    max_lag = max(p, q)
+
+    total_n = n + burnin + max_lag
+
+    z = np.random.normal(0, 1, total_n)
+    x = np.zeros(total_n)
+
+    for t in range(max_lag, total_n):
+        x[t] = z[t]
+
+        for k in range(1, p + 1):
+            x[t] += alpha[k - 1] * x[t - k]
+
+        for k in range(1, q + 1):
+            x[t] += beta[k - 1] * z[t - k]
+
+    return pd.Series(x[burnin + max_lag:], name=f"ARMA({p},{q})")
+
+
+def simulate_arima(n=500, alpha=None, d=1, beta=None, seed=42, burnin=300):
+    if alpha is None:
+        alpha = [0.5]
+    if beta is None:
+        beta = [0.4]
+
+    y = simulate_arma(
+        n=n,
+        alpha=alpha,
+        beta=beta,
+        seed=seed,
+        burnin=burnin
+    ).values
+
+    x = y.copy()
+
+    for _ in range(d):
+        x = np.cumsum(x)
+
+    return pd.Series(x, name=f"ARIMA({len(alpha)},{d},{len(beta)})")
+
+
+arima = simulate_arima(
+    n=500,
+    alpha=[0.5],
+    d=2,
+    beta=[0.5, 0.5, -0.5]
+)
+
+arima.plot(title="ARIMA(1,2,3)")
+plt.show()
