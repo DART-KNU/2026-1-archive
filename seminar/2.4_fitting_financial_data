@@ -1,0 +1,97 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import yfinance as yf
+
+from statsmodels.tsa.arima.model import ARIMA
+from statsmodels.tsa.stattools import adfuller
+from arch import arch_model
+
+
+def adf_report(series, name="series"):
+    result = adfuller(series.dropna())
+    
+    print(f"\n===== ADF Test: {name} =====")
+    print(f"ADF statistic: {result[0]:.4f}")
+    print(f"p-value      : {result[1]:.4f}")
+    
+    if result[1] < 0.05:
+        print("판정: 정상성 있음")
+    else:
+        print("판정: 비정상 가능성")
+
+
+# 1) 데이터 다운로드
+ticker = "AAPL"
+data = yf.download(ticker, start="2018-01-01", end="2024-12-31", progress=False)
+
+price = data["Close"].dropna()
+
+# 2) 로그수익률 계산
+returns = np.log(price / price.shift(1)).dropna()
+returns.name = "log_return"
+
+# GARCH fitting을 위해 보통 % 단위로 스케일 조정
+returns_pct = returns * 100
+
+
+# 3) 가격과 수익률 시각화
+plt.figure(figsize=(12, 4))
+plt.plot(price)
+plt.title(f"{ticker} Price")
+plt.grid(True)
+plt.show()
+
+plt.figure(figsize=(12, 4))
+plt.plot(returns)
+plt.title(f"{ticker} Log Returns")
+plt.grid(True)
+plt.show()
+
+
+# 4) 정상성 검정
+adf_report(price, f"{ticker} Price")
+adf_report(returns, f"{ticker} Log Returns")
+
+
+# 5) ARIMA fitting
+# 금융 return은 보통 이미 정상적이라 d=0으로 두는 경우가 많음
+model_arima = ARIMA(returns, order=(1, 0, 1))
+fit_arima = model_arima.fit()
+
+print(fit_arima.summary())
+
+
+# 6) ARIMA residual 확인
+resid = fit_arima.resid
+
+plt.figure(figsize=(12, 4))
+plt.plot(resid)
+plt.title("ARIMA Residuals")
+plt.grid(True)
+plt.show()
+
+
+# 7) GARCH(1,1) fitting
+# mean='Zero'는 평균방정식을 0으로 두겠다는 뜻
+garch_model = arch_model(
+    returns_pct,
+    mean="Zero",
+    vol="GARCH",
+    p=1,
+    q=1,
+    dist="normal"
+)
+
+garch_fit = garch_model.fit(disp="off")
+print(garch_fit.summary())
+
+
+# 8) 조건부 변동성 시각화
+cond_vol = garch_fit.conditional_volatility
+
+plt.figure(figsize=(12, 4))
+plt.plot(cond_vol)
+plt.title("GARCH(1,1) Conditional Volatility")
+plt.grid(True)
+plt.show()
