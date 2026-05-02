@@ -1,0 +1,46 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+def simulate_arch(n=500, alpha0=1e-5, alpha=[0.2, 0.4], seed=42, burnin=200):
+    np.random.seed(seed)
+    p = len(alpha)
+    total_n = n + burnin + p
+
+    if sum(alpha) >= 1:
+        print("Warning: ARCH 안정성 조건 sum(alpha) < 1 위반 가능")
+
+    z = np.random.normal(0, 1, total_n)
+    x = np.zeros(total_n)
+    sigma2 = np.zeros(total_n)
+
+    unconditional_var = alpha0 / (1 - sum(alpha)) if sum(alpha) < 1 else alpha0
+    sigma2[:p] = unconditional_var
+    x[:p] = np.sqrt(sigma2[:p]) * z[:p]
+
+    for t in range(p, total_n):
+        sigma2[t] = alpha0
+        for k in range(1, p + 1):
+            sigma2[t] += alpha[k - 1] * x[t - k] ** 2
+
+        x[t] = np.sqrt(sigma2[t]) * z[t]
+
+    result = pd.DataFrame({
+        "X": x[burnin + p:],
+        "sigma2": sigma2[burnin + p:],
+        "sigma": np.sqrt(sigma2[burnin + p:])
+    })
+
+    return result
+
+arch = simulate_arch(
+    n=100,
+    alpha0=1e-5,
+    alpha=[0.2, 0.4]
+)
+
+arch["X"].plot(title="ARCH(2) Returns")
+plt.show()
+
+arch["sigma"].plot(title="ARCH(2) Conditional Volatility")
+plt.show()
