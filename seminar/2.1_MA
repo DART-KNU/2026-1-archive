@@ -1,0 +1,22 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+def simulate_ma(n=500, beta=[0.5, -0.3], seed=42, burnin=100):
+    np.random.seed(seed)
+    q = len(beta)
+    total_n = n + burnin + q
+
+    z = np.random.normal(0, 1, total_n)
+    x = np.zeros(total_n)
+
+    for t in range(q, total_n):
+        x[t] = z[t]
+        for k in range(1, q + 1):
+            x[t] += beta[k - 1] * z[t - k]
+
+    return pd.Series(x[burnin + q:], name=f"MA({q})")
+
+ma = simulate_ma(n=100, beta=[-0.7, 0.1])
+ma.plot(title="MA(2)")
+plt.show()
