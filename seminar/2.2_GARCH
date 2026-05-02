@@ -1,0 +1,64 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+def simulate_garch(
+    n=500,
+    alpha0=1e-5,
+    alpha=[0.05],
+    beta=[0.9],
+    seed=42,
+    burnin=300
+):
+    np.random.seed(seed)
+    p = len(alpha)
+    q = len(beta)
+    max_lag = max(p, q)
+    total_n = n + burnin + max_lag
+
+    if sum(alpha) + sum(beta) >= 1:
+        print("Warning: GARCH 안정성 조건 sum(alpha)+sum(beta) < 1 위반 가능")
+
+    z = np.random.normal(0, 1, total_n)
+    x = np.zeros(total_n)
+    sigma2 = np.zeros(total_n)
+
+    denom = 1 - sum(alpha) - sum(beta)
+    unconditional_var = alpha0 / denom if denom > 0 else alpha0
+
+    sigma2[:max_lag] = unconditional_var
+    x[:max_lag] = np.sqrt(sigma2[:max_lag]) * z[:max_lag]
+
+    for t in range(max_lag, total_n):
+        sigma2[t] = alpha0
+
+        # ARCH terms
+        for k in range(1, p + 1):
+            sigma2[t] += alpha[k - 1] * x[t - k] ** 2
+
+        # GARCH terms
+        for k in range(1, q + 1):
+            sigma2[t] += beta[k - 1] * sigma2[t - k]
+
+        x[t] = np.sqrt(sigma2[t]) * z[t]
+
+    result = pd.DataFrame({
+        "X": x[burnin + max_lag:],
+        "sigma2": sigma2[burnin + max_lag:],
+        "sigma": np.sqrt(sigma2[burnin + max_lag:])
+    })
+
+    return result
+
+garch = simulate_garch(
+    n=100,
+    alpha0=1e-5,
+    alpha=[0.05],
+    beta=[0.9]
+)
+
+garch["X"].plot(title="GARCH(1,1) Returns")
+plt.show()
+
+garch["sigma"].plot(title="GARCH(1,1) Conditional Volatility")
+plt.show()
