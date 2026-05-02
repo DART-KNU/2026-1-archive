@@ -1,0 +1,12 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+def simulate_white_noise(n=500, seed=42):
+    np.random.seed(seed)
+    z = np.random.normal(loc=0, scale=1, size=n)
+    return pd.Series(z, name="White Noise")
+
+z = simulate_white_noise(n=500)
+z.plot(title="White Noise")
+plt.show()
