@@ -1,0 +1,65 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+from statsmodels.tsa.arima_process import ArmaProcess
+from statsmodels.tsa.stattools import adfuller
+from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
+
+
+def adf_report(series, name="series"):
+    result = adfuller(series.dropna())
+    
+    print(f"\n===== ADF Test: {name} =====")
+    print(f"ADF statistic: {result[0]:.4f}")
+    print(f"p-value      : {result[1]:.4f}")
+    print(f"lags used    : {result[2]}")
+    print(f"nobs         : {result[3]}")
+    
+    if result[1] < 0.05:
+        print("판정: p-value < 0.05 → 비정상성 H0 기각 → 정상 시계열")
+    else:
+        print("판정: p-value >= 0.05 → 비정상성 H0 기각 실패 → 비정상 가능성")
+
+
+# 1) 정상 AR(2) 시뮬레이션
+np.random.seed(42)
+
+ar_stationary = np.array([1, -0.9, 0.2])
+ma = np.array([1])
+
+arma_process = ArmaProcess(ar_stationary, ma)
+x_stationary = pd.Series(
+    arma_process.generate_sample(nsample=500),
+    name="stationary_AR2"
+)
+
+
+# 2) 비정상 Random Walk 시뮬레이션
+z = np.random.normal(0, 1, 500)
+x_random_walk = pd.Series(np.cumsum(z), name="random_walk")
+
+
+# 3) 그래프 비교
+plt.figure(figsize=(12, 4))
+plt.plot(x_stationary, label="Stationary AR(2)")
+plt.plot(x_random_walk, label="Random Walk", alpha=0.7)
+plt.title("Stationary AR(2) vs Nonstationary Random Walk")
+plt.legend()
+plt.grid(True)
+plt.show()
+
+
+# 4) ACF / PACF 확인
+plot_acf(x_stationary, lags=40)
+plt.title("ACF of Stationary AR(2)")
+plt.show()
+
+plot_acf(x_random_walk, lags=40)
+plt.title("ACF of Random Walk")
+plt.show()
+
+
+# 5) ADF test
+adf_report(x_stationary, "Stationary AR(2)")
+adf_report(x_random_walk, "Random Walk")
