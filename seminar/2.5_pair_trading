@@ -1,0 +1,115 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import yfinance as yf
+
+import statsmodels.api as sm
+from statsmodels.tsa.stattools import adfuller
+
+
+def adf_report(series, name="series"):
+    result = adfuller(series.dropna())
+    
+    print(f"\n===== ADF Test: {name} =====")
+    print(f"ADF statistic: {result[0]:.4f}")
+    print(f"p-value      : {result[1]:.4f}")
+    
+    if result[1] < 0.05:
+        print("판정: 정상성 있음 → mean-reverting 가능성")
+    else:
+        print("판정: 비정상 가능성 → pair trading 근거 약함")
+
+
+# 1) 데이터 다운로드
+tickers = ["MSFT", "AAPL"]
+data = yf.download(tickers, start="2018-01-01", end="2024-12-31", progress=False)["Close"]
+data = data.dropna()
+
+s1 = np.log(data["MSFT"])
+s2 = np.log(data["AAPL"])
+
+
+# 2) 가격 그래프
+plt.figure(figsize=(12, 4))
+plt.plot(s1, label="log MSFT")
+plt.plot(s2, label="log AAPL")
+plt.title("Log Prices")
+plt.legend()
+plt.grid(True)
+plt.show()
+
+
+# 3) 선형회귀로 hedge ratio beta 추정
+# s1 = const + beta * s2 + error
+X = sm.add_constant(s2)
+model = sm.OLS(s1, X).fit()
+
+alpha = model.params["const"]
+beta = model.params["AAPL"]
+
+print(model.summary())
+print(f"\nalpha = {alpha:.4f}")
+print(f"beta  = {beta:.4f}")
+
+
+# 4) Spread 계산
+spread = s1 - (alpha + beta * s2)
+spread.name = "spread"
+
+
+plt.figure(figsize=(12, 4))
+plt.plot(spread)
+plt.axhline(spread.mean(), color="black", linestyle="--")
+plt.title("Spread: log(MSFT) - alpha - beta log(AAPL)")
+plt.grid(True)
+plt.show()
+
+
+# 5) Spread 정상성 검정
+adf_report(spread, "Pair Spread")
+
+
+# 6) Z-score 계산
+zscore = (spread - spread.rolling(60).mean()) / spread.rolling(60).std()
+
+
+plt.figure(figsize=(12, 4))
+plt.plot(zscore)
+plt.axhline(2, color="red", linestyle="--")
+plt.axhline(0, color="black", linestyle="--")
+plt.axhline(-2, color="green", linestyle="--")
+plt.title("Spread Z-score")
+plt.grid(True)
+plt.show()
+
+
+# 7) 간단한 pair trading signal
+signals = pd.DataFrame(index=spread.index)
+signals["spread"] = spread
+signals["zscore"] = zscore
+signals["signal"] = 0
+
+# zscore > 2: spread가 너무 높음
+# MSFT가 상대적으로 비싸거나 AAPL이 상대적으로 쌈 -> MSFT short, AAPL long
+signals.loc[signals["zscore"] > 2, "signal"] = -1
+
+# zscore < -2: spread가 너무 낮음
+# MSFT가 상대적으로 싸거나 AAPL이 상대적으로 비쌈 -> MSFT long, AAPL short
+signals.loc[signals["zscore"] < -2, "signal"] = 1
+
+# zscore가 0 근처로 돌아오면 청산
+signals.loc[signals["zscore"].abs() < 0.3, "signal"] = 0
+
+signals["position"] = signals["signal"].replace(0, np.nan).ffill().fillna(0)
+
+
+plt.figure(figsize=(12, 4))
+plt.plot(signals["zscore"], label="z-score")
+plt.plot(signals["position"], label="position", alpha=0.8)
+plt.axhline(2, color="red", linestyle="--")
+plt.axhline(-2, color="green", linestyle="--")
+plt.axhline(0, color="black", linestyle="--")
+plt.legend()
+plt.title("Pair Trading Signals")
+plt.grid(True)
+plt.show()
