@@ -1,6 +1,6 @@
 # 레포트 제목
 
-* **Contributors:** 18기 안현승, 18기 예설
+* **Contributors:** 18기 안현승, 18기 예설우
 
 ## Introduction
 * 레포트 소개
